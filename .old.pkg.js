@@ -1,8 +1,8 @@
 {
   "name": "@google/gemini-cli",
-  "version": "0.3.4",
+  "version": "0.3.3",
   "engines": {
-      "bun": ">=1.0.0"
+    "node": ">=20.0.0"
   },
   "type": "module",
   "workspaces": [
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/google-gemini/gemini-cli.git"
   },
   "config": {
-    "sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.3.4"
+    "sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.3.3"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -91,6 +91,7 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
+    "@lvce-editor/ripgrep": "^1.6.0",
     "simple-git": "^3.28.0"
   },
   "optionalDependencies": {
