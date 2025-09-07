@@ -1,6 +1,10 @@
 import { execSync } from 'child_process';
 import bundle from './bun_bundle';
 
+const outputPath = process.argv.includes('--output')
+  ? process.argv[process.argv.indexOf('--output') + 1]
+  : 'bundle/gemini.js';
+
 /**
  * Bundles the CLI application.
  */
@@ -56,9 +60,6 @@ async function buildVscodeCompanion() {
  */
 async function main() {
   const args = process.argv.slice(2);
-  const outputPath = args.includes('--output')
-    ? args[args.indexOf('--output') + 1]
-    : 'bundle/gemini.js';
 
   const buildVscode = args.includes('--build-vscode');
   const bundleOnly = args.includes('--bundle');
