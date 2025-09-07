@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import bundle from './bun_build.js';
+import bundle from './bun_bundle.js';
 
 const outputPath = process.argv.includes('--output')
   ? process.argv[process.argv.indexOf('--output') + 1]
