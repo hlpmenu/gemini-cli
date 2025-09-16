@@ -52,4 +52,5 @@ gha-creds-*.json
 
 # Ignore upstream workflows
 .github/workflows/*
-!.github/workflows/release.yml
+!.github/workflows/hlmpn-release.yml
+!.github/workflows/hlmpn-ci.yml
