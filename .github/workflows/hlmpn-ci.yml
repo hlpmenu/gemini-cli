@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: bun i --frozen-lockfile
 
+      - name: Generate commit info
+        run: bun run generate
+
       - name: Lint
         run: bun run lint:ci
 
