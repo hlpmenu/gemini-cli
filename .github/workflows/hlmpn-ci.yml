@@ -23,7 +23,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '24.x'         # use any Node 24.* version
-          cache: 'bun'
 
       - name: Install dependencies
         run: bun i --frozen-lockfile
