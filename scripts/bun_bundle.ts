@@ -8,6 +8,9 @@ async function bundle(outputPath: string = 'bundle/gemini.js') {
     entrypoints: ['packages/cli/index.ts'],
     outfile: outputPath,
     target: 'bun',
+    write: true,
+    minify: true,
+    sourcemap: false,
     alias: {
       // yargs uses a CJS/ESM setup that can be tricky for bundlers.
       // This alias ensures we get the correct module.

@@ -1,5 +1,5 @@
 {
-  "name": "@google/gemini-cli",
+  "name": "@hlmpn/gemini-cli",
   "version": "0.3.4",
   "engines": {
       "bun": ">=1.0.0"
@@ -43,7 +43,6 @@
     "format": "prettier --experimental-cli --write .",
     "typecheck": "bun run typecheck --workspaces --if-present",
     "preflight": "bun run clean && bun ci && bun run format && bun run lint:ci && bun run build && bun run typecheck && bun run test:ci",
-    "prepare": "bun run bundle",
     "prepare:package": "bun scripts/prepare-package.js",
     "release:version": "bun scripts/version.js",
     "telemetry": "bun scripts/telemetry.js",
