@@ -96,19 +96,20 @@
   "main": "./dist/extension.cjs",
   "type": "module",
   "scripts": {
-    "vscode:prepublish": "npm run generate:notices && npm run check-types && npm run lint && node esbuild.js --production",
-    "build": "npm run compile",
-    "compile": "npm run check-types && npm run lint && node esbuild.js",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "vsce package --no-dependencies",
-    "generate:notices": "node ./scripts/generate-notices.js",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src",
-    "test": "vitest run",
-    "test:ci": "vitest run --coverage"
+    "vscode:prepublish": "bun run generate:notices && bun run check-types && bun run lint && bun esbuild.js --production",
+    "build": "bun run compile",
+    "compile": "bun run check-types && bun run lint && bun  esbuild.js",
+    "watch": "bunx npm-run-all -p watch:*",
+    "watch:esbuild": "bun  esbuild.js --watch",
+    "watch:tsc": "bunx tsc --noEmit --watch --project tsconfig.json",
+    "package": "bunx vsce package --no-dependencies",
+    "generate:notices": "bun scripts/bun-generate-notices.js",
+    "check-types": "bunx tsc --noEmit",
+    "lint": "bunx --bun eslint src",
+    "test": "bunx --bun vitest run",
+    "test:ci": "bunx --bun vitest run --coverage"
   },
+
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",

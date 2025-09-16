@@ -50,10 +50,68 @@ async function buildSandbox() {
 /**
  * Builds the VSCode companion extension.
  */
-async function buildVscodeCompanion() {
-  console.log('Building VSCode companion...');
-  execSync('node scripts/build_vscode_companion.js', { stdio: 'inherit' });
-}
+const buildVscodeCompanion = async () => {
+  console.log("Building VSCode companion...");
+
+  const vscodeDir = new URL("../packages/vscode-ide-companion/", import.meta.url).pathname;
+
+  const proc = Bun.spawnSync({
+    cmd: ["bun", "run", "package"], // runs the "package" script in that workspace
+    cwd: vscodeDir,
+    stdout: "inherit",
+    stderr: "inherit",
+    env: Bun.env,
+  });
+
+  if (proc.exitCode !== 0) {
+    throw new Error(`VSCode companion build failed with exit code ${proc.exitCode}`);
+  }
+};
+
+ const buildPackage = async () => {
+
+
+    if (!process.cwd().includes("packages")) {
+      console.error("must be invoked from a package directory");
+      process.exit(1);
+    }
+
+  if (typeof Bun === "undefined") {
+    try {
+    execSync("node scripts/build_package.js", { stdio: "inherit" });
+    return;
+    } catch (e) {
+      console.error("Error building package:", e);
+      process.exit(1);
+    }
+  } 
+
+
+  // 1. Run type-checks only
+  execSync("bunx tsc --noEmit", { stdio: "inherit" });
+
+  // 2. Bundle sources with Bun (TS + TSX supported)
+  const result = await Bun.build({
+    entrypoints: ["index.ts"], // or point directly at src/index.tsx
+    outdir: "dist",
+    target: "bun", // adjust: "browser" / "node" depending on your package
+    sourcemap: "inline",
+    minify: true,
+  });
+
+  if (!result.success) {
+    console.error("Bun.build failed:", result.logs);
+    process.exit(1);
+  }
+
+  // 3. Copy over static files (.md, .json)
+  execSync("bun ../../scripts/copy_files.js", { stdio: "inherit" });
+
+  // 4. Touch dist/.last_build
+  writeFileSync(join(process.cwd(), "dist", ".last_build"), "");
+  console.log("✅ build complete");
+};
+
 
 /**
  * Main build process execution.

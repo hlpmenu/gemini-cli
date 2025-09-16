@@ -12,14 +12,14 @@
     "gemini": "dist/index.js"
   },
   "scripts": {
-    "build": "node ../../scripts/build_package.js",
-    "start": "node dist/index.js",
+    "build": "bun ../../scripts/build_package.js",
+    "start": "bun dist/index.js",
     "debug": "node --inspect-brk dist/index.js",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bunx --bun tsc --noEmit"
   },
   "files": [
     "dist"

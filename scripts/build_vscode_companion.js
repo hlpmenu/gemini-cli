@@ -24,7 +24,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 
-execSync('npm --workspace=gemini-cli-vscode-ide-companion run package', {
+
+execSync('bun run package --workspace=gemini-cli-vscode-ide-companion ', {
   stdio: 'inherit',
   cwd: root,
 });

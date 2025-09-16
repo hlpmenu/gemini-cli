@@ -6,16 +6,16 @@ async function bundle(outputPath: string = 'bundle/gemini.js') {
 
   const result = await Bun.build({
     entrypoints: ['packages/cli/index.ts'],
-    outfile: outputPath,
     target: 'bun',
-    write: true,
-    minify: true,
     sourcemap: false,
-    alias: {
-      // yargs uses a CJS/ESM setup that can be tricky for bundlers.
-      // This alias ensures we get the correct module.
-      yargs: 'yargs/yargs',
-    },
+      minify: {
+    whitespace: true,
+    identifiers: true,
+    syntax: true,
+    keepNames: false, // default
+  },
+
+
   });
 
   if (!result.success) {
@@ -25,6 +25,12 @@ async function bundle(outputPath: string = 'bundle/gemini.js') {
     }
     process.exit(1);
   }
+  // Get the first (and only) output file
+const output = result.outputs[0];
+
+// Write it exactly where you want it
+await Bun.write("bundle/gemini.js", output);
+
 
   console.log('Bun build complete!');
 }
