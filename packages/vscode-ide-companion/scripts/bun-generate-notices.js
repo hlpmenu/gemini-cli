@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
+
 /**
  * @license
- * Copyright 2025
+ * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
