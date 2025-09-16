@@ -38,13 +38,12 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: '1.2.x'    # any Bun 1.2.* version
+          bun-version: '1.2.22'    # any Bun 1.2.* version
 
       - name: Setup Node.js for Publishing
         uses: actions/setup-node@v5
         with:
           node-version: '24.x'    # any Node.js 24.* version
-          cache: 'bun'
           registry-url: 'https://registry.npmjs.org/'
           scope: '@hlmpn'
 
