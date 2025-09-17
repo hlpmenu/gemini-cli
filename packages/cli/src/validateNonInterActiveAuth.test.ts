@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { validateNonInteractiveAuth } from './validateNonInterActiveAuth.js';
-import { AuthType, OutputFormat } from '@google/gemini-cli-core';
 import type { Config } from '@google/gemini-cli-core';
+import { AuthType, OutputFormat } from '@google/gemini-cli-core';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as auth from './config/auth.js';
-import { type LoadedSettings } from './config/settings.js';
+import type { LoadedSettings } from './config/settings.js';
+import { validateNonInteractiveAuth } from './validateNonInterActiveAuth.js';
 
 describe('validateNonInterActiveAuth', () => {
   let originalEnvGeminiApiKey: string | undefined;

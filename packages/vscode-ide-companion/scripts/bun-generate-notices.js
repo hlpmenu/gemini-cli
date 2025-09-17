@@ -6,38 +6,55 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // project root = ../../.. from this script (same as original)
-const projectRoot = path.resolve(path.join(__dirname, "..", "..", ".."));
-const packagePath = path.join(projectRoot, "packages", "vscode-ide-companion");
-const noticeFilePath = path.join(packagePath, "NOTICES.txt");
+const projectRoot = path.resolve(path.join(__dirname, '..', '..', '..'));
+const packagePath = path.join(projectRoot, 'packages', 'vscode-ide-companion');
+const noticeFilePath = path.join(packagePath, 'NOTICES.txt');
 
 function normalizeRepo(repo) {
-  if (!repo) return undefined;
-  if (typeof repo === "string") return repo;
+  if (!repo) {
+    return undefined;
+  }
+  if (typeof repo === 'string') {
+    return repo;
+  }
   return repo.url ?? undefined;
 }
 
 async function getDependencyLicense(depName, depVersion) {
   let depPackageJsonPath;
-  let licenseContent = "License text not found.";
-  let repositoryUrl = "No repository found";
+  let licenseContent = 'License text not found.';
+  let repositoryUrl = 'No repository found';
 
   try {
     // Prefer root hoisted dependency
-    depPackageJsonPath = path.join(projectRoot, "node_modules", depName, "package.json");
+    depPackageJsonPath = path.join(
+      projectRoot,
+      'node_modules',
+      depName,
+      'package.json',
+    );
     if (!(await fs.stat(depPackageJsonPath).catch(() => false))) {
       // Fallback to package-local node_modules
-      depPackageJsonPath = path.join(packagePath, "node_modules", depName, "package.json");
+      depPackageJsonPath = path.join(
+        packagePath,
+        'node_modules',
+        depName,
+        'package.json',
+      );
     }
 
-    const depPackageJsonContent = await fs.readFile(depPackageJsonPath, "utf-8");
+    const depPackageJsonContent = await fs.readFile(
+      depPackageJsonPath,
+      'utf-8',
+    );
     const depPackageJson = JSON.parse(depPackageJsonContent);
 
     repositoryUrl = normalizeRepo(depPackageJson.repository) ?? repositoryUrl;
@@ -45,10 +62,10 @@ async function getDependencyLicense(depName, depVersion) {
     const packageDir = path.dirname(depPackageJsonPath);
     const licenseFileCandidates = [
       depPackageJson.licenseFile,
-      "LICENSE",
-      "LICENSE.md",
-      "LICENSE.txt",
-      "LICENSE-MIT.txt",
+      'LICENSE',
+      'LICENSE.md',
+      'LICENSE.txt',
+      'LICENSE-MIT.txt',
     ].filter(Boolean);
 
     let licenseFile;
@@ -62,15 +79,19 @@ async function getDependencyLicense(depName, depVersion) {
 
     if (licenseFile) {
       try {
-        licenseContent = await fs.readFile(licenseFile, "utf-8");
+        licenseContent = await fs.readFile(licenseFile, 'utf-8');
       } catch (e) {
-        console.warn(`Warning: Failed to read license file for ${depName}: ${e.message}`);
+        console.warn(
+          `Warning: Failed to read license file for ${depName}: ${e.message}`,
+        );
       }
     } else {
       console.warn(`Warning: Could not find license file for ${depName}`);
     }
   } catch (e) {
-    console.warn(`Warning: Could not find package.json for ${depName}: ${e.message}`);
+    console.warn(
+      `Warning: Could not find package.json for ${depName}: ${e.message}`,
+    );
   }
 
   return {
@@ -82,12 +103,16 @@ async function getDependencyLicense(depName, depVersion) {
 }
 
 function collectDependencies(packageName, packageLock, dependenciesMap) {
-  if (dependenciesMap.has(packageName)) return;
+  if (dependenciesMap.has(packageName)) {
+    return;
+  }
 
   const key = `node_modules/${packageName}`;
   const packageInfo = packageLock.packages[key];
   if (!packageInfo) {
-    console.warn(`Warning: Could not find package info for ${packageName} in package-lock.json.`);
+    console.warn(
+      `Warning: Could not find package info for ${packageName} in package-lock.json.`,
+    );
     return;
   }
 
@@ -102,12 +127,15 @@ function collectDependencies(packageName, packageLock, dependenciesMap) {
 
 async function main() {
   try {
-    const packageJsonPath = path.join(packagePath, "package.json");
-    const packageJsonContent = await fs.readFile(packageJsonPath, "utf-8");
+    const packageJsonPath = path.join(packagePath, 'package.json');
+    const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
     const packageJson = JSON.parse(packageJsonContent);
 
-    const packageLockJsonPath = path.join(projectRoot, "package-lock.json");
-    const packageLockJsonContent = await fs.readFile(packageLockJsonPath, "utf-8");
+    const packageLockJsonPath = path.join(projectRoot, 'npm-shrinkwrap.json');
+    const packageLockJsonContent = await fs.readFile(
+      packageLockJsonPath,
+      'utf-8',
+    );
     const packageLockJson = JSON.parse(packageLockJsonContent);
 
     const allDependencies = new Map();
@@ -121,15 +149,16 @@ async function main() {
 
     const dependencyLicenses = await Promise.all(
       dependencyEntries.map(([depName, depVersion]) =>
-        getDependencyLicense(depName, depVersion)
-      )
+        getDependencyLicense(depName, depVersion),
+      ),
     );
 
     let noticeText =
-      "This file contains third-party software notices and license terms.\n\n";
+      'This file contains third-party software notices and license terms.\n\n';
 
     for (const dep of dependencyLicenses) {
-      noticeText += "============================================================\n";
+      noticeText +=
+        '============================================================\n';
       noticeText += `${dep.name}@${dep.version}\n`;
       noticeText += `(${dep.repository})\n\n`;
       noticeText += `${dep.license}\n\n`;
@@ -138,7 +167,7 @@ async function main() {
     await fs.writeFile(noticeFilePath, noticeText);
     console.log(`NOTICES.txt generated at ${noticeFilePath}`);
   } catch (error) {
-    console.error("Error generating NOTICES.txt:", error);
+    console.error('Error generating NOTICES.txt:', error);
     process.exit(1);
   }
 }

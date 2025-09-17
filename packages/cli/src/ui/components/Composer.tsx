@@ -99,8 +99,7 @@ export const Composer = () => {
             <Box paddingLeft={2}>
               <Text dimColor>
                 ... (+
-                {uiState.messageQueue.length -
-                  MAX_DISPLAYED_QUEUED_MESSAGES}{' '}
+                {uiState.messageQueue.length - MAX_DISPLAYED_QUEUED_MESSAGES}{' '}
                 more)
               </Text>
             </Box>

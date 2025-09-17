@@ -6,65 +6,65 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { promises as fs } from "node:fs";
-import { join } from "node:path";
-import { $ } from "bun";
+import { promises as fs } from 'node:fs';
+import { join } from 'node:path';
+import { $ } from 'bun';
 
 const runTypecheck = async (dir: string) => {
-	let result: $.ShellOutput;
-	try {
-		result = await $`cd ${dir} && bun run typecheck`;
-	} catch (e) {
-		if (e instanceof $.ShellError) {
-			const msg = `${e.stderr} ${e.stdout}`;
-			if (msg.includes("Missing script") || msg.includes("Script not found")) {
-				console.log(`${dir} has no typecheck script if trigger`);
-				return { dir, status: "skip" as const };
-			}
-			throw new Error(msg);
-		} else {
-			throw e;
-		}
-	}
+  let result: $.ShellOutput;
+  try {
+    result = await $`cd ${dir} && bun run typecheck`;
+  } catch (e) {
+    if (e instanceof $.ShellError) {
+      const msg = `${e.stderr} ${e.stdout}`;
+      if (msg.includes('Missing script') || msg.includes('Script not found')) {
+        console.log(`${dir} has no typecheck script if trigger`);
+        return { dir, status: 'skip' as const };
+      }
+      throw new Error(msg);
+    } else {
+      throw e;
+    }
+  }
 
-	if (result?.exitCode === 0) {
-		return { dir, status: "ok" as const };
-	}
+  if (result?.exitCode === 0) {
+    return { dir, status: 'ok' as const };
+  }
 
-	const out = result.text();
-	if (out.includes("Missing script") || out.includes("Script not found")) {
-		console.log(`${dir} has no typecheck script`);
-		return { dir, status: "skip" as const };
-	}
+  const out = result.text();
+  if (out.includes('Missing script') || out.includes('Script not found')) {
+    console.log(`${dir} has no typecheck script`);
+    return { dir, status: 'skip' as const };
+  }
 
-	return { dir, status: "fail" as const, code: result.exitCode, output: out };
+  return { dir, status: 'fail' as const, code: result.exitCode, output: out };
 };
 
 const main = async () => {
-	const entries = await fs.readdir("packages", { withFileTypes: true });
+  const entries = await fs.readdir('packages', { withFileTypes: true });
 
-	const tasks = entries
-		.filter((entry) => entry.isDirectory())
-		.map((entry) => runTypecheck(join("packages", entry.name)));
+  const tasks = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => runTypecheck(join('packages', entry.name)));
 
-	const results = await Promise.all(tasks);
+  const results = await Promise.all(tasks);
 
-	let failed = false;
-	for (const r of results) {
-		if (r.status === "ok") {
-			console.log(`${r.dir} passed`);
-		} else if (r.status === "skip") {
-			console.log(`${r.dir} has no typecheck script`);
-		} else {
-			console.error(`Error: ${r.dir} failed with exit code ${r.code}`);
-			console.error(r.output);
-			failed = true;
-		}
-	}
+  let failed = false;
+  for (const r of results) {
+    if (r.status === 'ok') {
+      console.log(`${r.dir} passed`);
+    } else if (r.status === 'skip') {
+      console.log(`${r.dir} has no typecheck script`);
+    } else {
+      console.error(`Error: ${r.dir} failed with exit code ${r.code}`);
+      console.error(r.output);
+      failed = true;
+    }
+  }
 
-	if (failed) process.exit(1);
+  if (failed) process.exit(1);
 
-	console.log("All packages typechecked successfully");
+  console.log('All packages typechecked successfully');
 };
 
 await main();

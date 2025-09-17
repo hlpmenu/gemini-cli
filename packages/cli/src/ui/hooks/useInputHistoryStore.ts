@@ -92,7 +92,9 @@ export function useInputHistoryStore(): UseInputHistoryStoreReturn {
 
         setPastSessionMessages((prevPast) => {
           recalculateHistory(
-            newCurrentSession.slice().reverse(), // Convert to newest first
+            newCurrentSession
+              .slice()
+              .reverse(), // Convert to newest first
             prevPast,
           );
           return prevPast; // No change to past messages

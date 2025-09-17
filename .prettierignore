@@ -19,3 +19,4 @@ gha-creds-*.json
 junit.xml
 npm-shrinkwrap.json
 Thumbs.db
+bun.lock

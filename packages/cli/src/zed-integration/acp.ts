@@ -6,12 +6,13 @@
 
 /* ACP defines a schema for a simple (experimental) JSON-RPC protocol that allows GUI applications to interact with agents. */
 
-import { z } from 'zod';
 import { EOL } from 'node:os';
+import { z } from 'zod';
 import * as schema from './schema.js';
+
 export * from './schema.js';
 
-import type { WritableStream, ReadableStream } from 'node:stream/web';
+import type { ReadableStream, WritableStream } from 'node:stream/web';
 
 export class AgentSideConnection implements Client {
   #connection: Connection;

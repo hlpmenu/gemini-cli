@@ -417,7 +417,7 @@ export class IdeConnectionEvent {
 }
 
 export class ConversationFinishedEvent {
-  'event_name': 'conversation_finished';
+  event_name: 'conversation_finished';
   'event.timestamp': string; // ISO 8601;
   approvalMode: ApprovalMode;
   turnCount: number;

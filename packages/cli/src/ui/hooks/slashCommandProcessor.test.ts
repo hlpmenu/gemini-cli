@@ -892,7 +892,9 @@ describe('useSlashCommandProcessor', () => {
 
           vi.fn(), // openSettingsDialog
           vi.fn(), // toggleVimEnabled
-          vi.fn().mockResolvedValue(false), // toggleVimEnabled
+          vi
+            .fn()
+            .mockResolvedValue(false), // toggleVimEnabled
           vi.fn(), // setIsProcessing
         ),
       );

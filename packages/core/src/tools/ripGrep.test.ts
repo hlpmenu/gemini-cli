@@ -142,11 +142,7 @@ describe('ensureRgPath', () => {
 
 // Helper function to create mock spawn implementations
 function createMockSpawn(
-  options: {
-    outputData?: string;
-    exitCode?: number;
-    signal?: string;
-  } = {},
+  options: { outputData?: string; exitCode?: number; signal?: string } = {},
 ) {
   const { outputData, exitCode = 0, signal } = options;
 

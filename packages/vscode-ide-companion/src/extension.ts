@@ -144,8 +144,9 @@ export async function activate(context: vscode.ExtensionContext) {
     log(`Failed to start IDE server: ${message}`);
   }
 
-  const infoMessageEnabled =
-    !HIDE_INSTALLATION_GREETING_IDES.has(detectIdeFromEnv());
+  const infoMessageEnabled = !HIDE_INSTALLATION_GREETING_IDES.has(
+    detectIdeFromEnv(),
+  );
 
   if (!context.globalState.get(INFO_MESSAGE_SHOWN_KEY) && infoMessageEnabled) {
     void vscode.window.showInformationMessage(

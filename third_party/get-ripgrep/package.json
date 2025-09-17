@@ -15,10 +15,7 @@
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "format": "prettier --write ."
   },
-  "keywords": [
-    "lvce-editor",
-    "ripgrep"
-  ],
+  "keywords": ["lvce-editor", "ripgrep"],
   "author": "Lvce Editor",
   "license": "MIT",
   "dependencies": {
