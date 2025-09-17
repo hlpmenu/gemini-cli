@@ -1536,6 +1536,7 @@ describe("loadCliConfig folderTrust", () => {
 	});
 });
 
+// broken
 describe("loadCliConfig with includeDirectories", () => {
 	const originalArgv = process.argv;
 
@@ -1555,9 +1556,9 @@ describe("loadCliConfig with includeDirectories", () => {
 	});
 
 	it("should combine and resolve paths from settings and CLI arguments", async () => {
-		const mockCwd = path.resolve(path.sep, "home", "user", "project");
+		const mockCwd = path.resolve("../../", path.sep, "home", "user", "project");
 		process.argv = [
-			"node",
+			"bun",
 			"script.js",
 			"--include-directories",
 			`${path.resolve(path.sep, "cli", "path1")},${path.join(mockCwd, "cli", "path2")}`,
