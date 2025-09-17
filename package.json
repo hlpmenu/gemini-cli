@@ -1,6 +1,6 @@
 {
 	"name": "@hlmpn/gemini-cli",
-	"version": "0.3.4",
+	"version": "0.6.0-nightly",
 	"engines": {
 		"bun": "1.2.x",
 		"node": "24.x"
@@ -15,7 +15,7 @@
 		"url": "git+https://github.com/hlpmenu/gemini-cli.git"
 	},
 	"config": {
-		"sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.3.4"
+		"sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.6.0-nightly"
 	},
 	"scripts": {
 		"start": "bun scripts/start.js",
@@ -46,12 +46,14 @@
 		"lint": "bunx --bun eslint . --ext .ts,.tsx && bunx --bun eslint integration-tests",
 		"lint:fix": "bunx --bun eslint . --fix && bunx --bun eslint integration-tests --fix",
 		"lint:ci": "bunx --bun eslint . --ext .ts,.tsx --max-warnings 0 && bunx --bun eslint integration-tests --max-warnings 0",
+		"lint:all": "bun scripts/lint.js",
 
 		"format": "bunx --bun prettier --experimental-cli --write .",
 
 		"typecheck": "bun scripts/typecheck.ts",
 		"preflight": "bun run clean && bun ci && bun run format && bun run lint:ci && bun run build && bun run typecheck && bun run test:ci",
 
+		"prepare": "bun run bundle",
 		"prepare:package": "bun scripts/prepare-package.js",
 		"release:version": "bun scripts/version.js",
 		"telemetry": "bun scripts/telemetry.js",
@@ -98,7 +100,7 @@
 		"yargs": "^17.7.2"
 	},
 	"dependencies": {
-		"simple-git": "^3.28.0"
+		"simple-git": "^3.2.0"
 	},
 	"optionalDependencies": {
 		"@lydell/node-pty": "1.1.0",

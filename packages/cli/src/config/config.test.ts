@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+<<<<<<< HEAD
 import * as os from "node:os";
 import * as path from "node:path";
 import * as ServerConfig from "@google/gemini-cli-core";
@@ -13,6 +14,23 @@ import { type CliArgs, loadCliConfig, parseArguments } from "./config.js";
 import type { Extension } from "./extension.js";
 import type { Settings } from "./settings.js";
 import { isWorkspaceTrusted } from "./trustedFolders.js";
+=======
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import {
+  ShellTool,
+  EditTool,
+  WriteFileTool,
+  DEFAULT_GEMINI_MODEL,
+  DEFAULT_GEMINI_MODEL_AUTO,
+} from '@google/gemini-cli-core';
+import { loadCliConfig, parseArguments, type CliArgs } from './config.js';
+import type { Settings } from './settings.js';
+import type { Extension } from './extension.js';
+import * as ServerConfig from '@google/gemini-cli-core';
+import { isWorkspaceTrusted } from './trustedFolders.js';
+>>>>>>> f5dca8b7f7174ca2ba94568523c63c459c1dd3e5
 
 vi.mock("./trustedFolders.js", () => ({
 	isWorkspaceTrusted: vi.fn().mockReturnValue(true), // Default to trusted
@@ -1484,8 +1502,104 @@ describe("loadCliConfig model selection", () => {
 	});
 });
 
+<<<<<<< HEAD
 describe("loadCliConfig folderTrust", () => {
 	const originalArgv = process.argv;
+=======
+describe('loadCliConfig model selection with model router', () => {
+  it('should use auto model when useModelRouter is true and no model is provided', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {
+        experimental: {
+          useModelRouter: true,
+        },
+      },
+      [],
+      'test-session',
+      argv,
+    );
+
+    expect(config.getModel()).toBe(DEFAULT_GEMINI_MODEL_AUTO);
+  });
+
+  it('should use default model when useModelRouter is false and no model is provided', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {
+        experimental: {
+          useModelRouter: false,
+        },
+      },
+      [],
+      'test-session',
+      argv,
+    );
+
+    expect(config.getModel()).toBe(DEFAULT_GEMINI_MODEL);
+  });
+
+  it('should prioritize argv over useModelRouter', async () => {
+    process.argv = ['node', 'script.js', '--model', 'gemini-from-argv'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {
+        experimental: {
+          useModelRouter: true,
+        },
+      },
+      [],
+      'test-session',
+      argv,
+    );
+
+    expect(config.getModel()).toBe('gemini-from-argv');
+  });
+
+  it('should prioritize settings over useModelRouter', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {
+        experimental: {
+          useModelRouter: true,
+        },
+        model: {
+          name: 'gemini-from-settings',
+        },
+      },
+      [],
+      'test-session',
+      argv,
+    );
+
+    expect(config.getModel()).toBe('gemini-from-settings');
+  });
+
+  it('should prioritize environment variable over useModelRouter', async () => {
+    process.argv = ['node', 'script.js'];
+    vi.stubEnv('GEMINI_MODEL', 'gemini-from-env');
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {
+        experimental: {
+          useModelRouter: true,
+        },
+      },
+      [],
+      'test-session',
+      argv,
+    );
+
+    expect(config.getModel()).toBe('gemini-from-env');
+  });
+});
+
+describe('loadCliConfig folderTrust', () => {
+  const originalArgv = process.argv;
+>>>>>>> f5dca8b7f7174ca2ba94568523c63c459c1dd3e5
 
 	beforeEach(() => {
 		vi.resetAllMocks();
@@ -1690,6 +1804,7 @@ describe("loadCliConfig tool exclusions", () => {
 		vi.restoreAllMocks();
 	});
 
+<<<<<<< HEAD
 	it("should not exclude interactive tools in interactive mode without YOLO", async () => {
 		process.stdin.isTTY = true;
 		process.argv = ["node", "script.js"];
@@ -1729,6 +1844,57 @@ describe("loadCliConfig tool exclusions", () => {
 		expect(config.getExcludeTools()).not.toContain("replace");
 		expect(config.getExcludeTools()).not.toContain("write_file");
 	});
+=======
+  it('should be true by default when useRipgrep is not set in settings', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const settings: Settings = {};
+    const config = await loadCliConfig(settings, [], 'test-session', argv);
+    expect(config.getUseRipgrep()).toBe(true);
+  });
+
+  it('should be false when useRipgrep is set to false in settings', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const settings: Settings = { tools: { useRipgrep: false } };
+    const config = await loadCliConfig(settings, [], 'test-session', argv);
+    expect(config.getUseRipgrep()).toBe(false);
+  });
+
+  it('should be true when useRipgrep is explicitly set to true in settings', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const settings: Settings = { tools: { useRipgrep: true } };
+    const config = await loadCliConfig(settings, [], 'test-session', argv);
+    expect(config.getUseRipgrep()).toBe(true);
+  });
+
+  describe('loadCliConfig useModelRouter', () => {
+    it('should be false by default when useModelRouter is not set in settings', async () => {
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments({} as Settings);
+      const settings: Settings = {};
+      const config = await loadCliConfig(settings, [], 'test-session', argv);
+      expect(config.getUseModelRouter()).toBe(false);
+    });
+
+    it('should be true when useModelRouter is set to true in settings', async () => {
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments({} as Settings);
+      const settings: Settings = { experimental: { useModelRouter: true } };
+      const config = await loadCliConfig(settings, [], 'test-session', argv);
+      expect(config.getUseModelRouter()).toBe(true);
+    });
+
+    it('should be false when useModelRouter is explicitly set to false in settings', async () => {
+      process.argv = ['node', 'script.js'];
+      const argv = await parseArguments({} as Settings);
+      const settings: Settings = { experimental: { useModelRouter: false } };
+      const config = await loadCliConfig(settings, [], 'test-session', argv);
+      expect(config.getUseModelRouter()).toBe(false);
+    });
+  });
+>>>>>>> f5dca8b7f7174ca2ba94568523c63c459c1dd3e5
 });
 
 describe("loadCliConfig interactive", () => {
@@ -1994,6 +2160,7 @@ describe("parseArguments with positional prompt", () => {
 			throw new Error("process.exit called");
 		});
 
+<<<<<<< HEAD
 		const mockConsoleError = vi
 			.spyOn(console, "error")
 			.mockImplementation(() => {});
@@ -2023,4 +2190,120 @@ describe("parseArguments with positional prompt", () => {
 		const argv = await parseArguments({} as Settings);
 		expect(argv.prompt).toBe("test prompt");
 	});
+=======
+  it.each(testCases)(
+    'should pass $property from settings to config when $value',
+    async ({ property, getter, value }) => {
+      const settings: Settings = {
+        context: {
+          fileFiltering: { [property]: value },
+        },
+      };
+      const argv = await parseArguments(settings);
+      const config = await loadCliConfig(settings, [], 'test-session', argv);
+      expect(getter(config)).toBe(value);
+    },
+  );
+});
+
+describe('Output Format Configuration', () => {
+  const originalArgv = process.argv;
+
+  afterEach(() => {
+    process.argv = originalArgv;
+    vi.restoreAllMocks();
+  });
+
+  it('should default to text format when no setting or flag is provided', async () => {
+    process.argv = ['node', 'script.js'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {} as Settings,
+      [],
+      'test-session',
+      argv,
+    );
+    expect(config.getOutputFormat()).toBe(ServerConfig.OutputFormat.TEXT);
+  });
+
+  it('should use the format from settings when no flag is provided', async () => {
+    process.argv = ['node', 'script.js'];
+    const settings: Settings = { output: { format: 'json' } };
+    const argv = await parseArguments(settings);
+    const config = await loadCliConfig(settings, [], 'test-session', argv);
+    expect(config.getOutputFormat()).toBe(ServerConfig.OutputFormat.JSON);
+  });
+
+  it('should use the format from the flag when provided', async () => {
+    process.argv = ['node', 'script.js', '--output-format', 'json'];
+    const argv = await parseArguments({} as Settings);
+    const config = await loadCliConfig(
+      {} as Settings,
+      [],
+      'test-session',
+      argv,
+    );
+    expect(config.getOutputFormat()).toBe(ServerConfig.OutputFormat.JSON);
+  });
+
+  it('should prioritize the flag over the setting', async () => {
+    process.argv = ['node', 'script.js', '--output-format', 'text'];
+    const settings: Settings = { output: { format: 'json' } };
+    const argv = await parseArguments(settings);
+    const config = await loadCliConfig(settings, [], 'test-session', argv);
+    expect(config.getOutputFormat()).toBe(ServerConfig.OutputFormat.TEXT);
+  });
+});
+
+describe('parseArguments with positional prompt', () => {
+  const originalArgv = process.argv;
+
+  afterEach(() => {
+    process.argv = originalArgv;
+  });
+
+  it('should throw an error when both a positional prompt and the --prompt flag are used', async () => {
+    process.argv = [
+      'node',
+      'script.js',
+      'positional',
+      'prompt',
+      '--prompt',
+      'test prompt',
+    ];
+
+    const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+
+    const mockConsoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    await expect(parseArguments({} as Settings)).rejects.toThrow(
+      'process.exit called',
+    );
+
+    expect(mockConsoleError).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Cannot use both a positional prompt and the --prompt (-p) flag together',
+      ),
+    );
+
+    mockExit.mockRestore();
+    mockConsoleError.mockRestore();
+  });
+
+  it('should correctly parse a positional prompt', async () => {
+    process.argv = ['node', 'script.js', 'positional', 'prompt'];
+    const argv = await parseArguments({} as Settings);
+    expect(argv.promptWords).toEqual(['positional', 'prompt']);
+  });
+
+  it('should correctly parse a prompt from the --prompt flag', async () => {
+    process.argv = ['node', 'script.js', '--prompt', 'test prompt'];
+    const argv = await parseArguments({} as Settings);
+    expect(argv.prompt).toBe('test prompt');
+  });
+>>>>>>> f5dca8b7f7174ca2ba94568523c63c459c1dd3e5
 });
