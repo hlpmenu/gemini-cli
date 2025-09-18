@@ -54,3 +54,6 @@ gha-creds-*.json
 .github/workflows/*
 !.github/workflows/hlmpn-release.yml
 !.github/workflows/hlmpn-ci.yml
+
+# Ignore local worktrees
+.worktrees/

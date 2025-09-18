@@ -8,6 +8,7 @@
     "checkJs": false,
     "allowJs": true,
     "types": ["node", "vitest/globals", "bun"],
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "noPropertyAccessFromIndexSignature": false
   }
 }

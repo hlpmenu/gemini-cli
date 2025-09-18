@@ -5,13 +5,13 @@
  */
 
 import {
+  type Config,
   IdeClient,
   IdeConnectionEvent,
   IdeConnectionType,
   logIdeConnection,
-  type Config,
 } from '@google/gemini-cli-core';
-import { type LoadedSettings } from '../config/settings.js';
+import type { LoadedSettings } from '../config/settings.js';
 import { performInitialAuth } from './auth.js';
 import { validateTheme } from './theme.js';
 

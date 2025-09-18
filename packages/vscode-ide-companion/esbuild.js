@@ -30,39 +30,10 @@ const esbuildProblemMatcherPlugin = {
     });
   },
 };
-const aliasPlugin = {
-  name: 'alias-resolver',
-  setup(builder) {
-    builder.onResolve(
-      { filter: /^@google\/gemini-cli-core(\/.*)?$/ },
-      async (args) => {
-        // e.g. map to the local src directory
-        const pathSuffix = args.path.replace(/^@google\/gemini-cli-core/, '');
-        const resolved = `../../core/src${pathSuffix}`; // adjust relative as needed
-        return {
-          path: new URL(resolved, import.meta.url).pathname,
-        };
-      },
-    );
-  },
-};
 
 const buildWithBun = async () => {
   const production = process.argv.includes('--production');
   const watch = process.argv.includes('--watch');
-
-  // Simple plugin to mimic the ProblemMatcher
-  const problemMatcherPlugin = {
-    name: 'bun-problem-matcher',
-    setup(build) {
-      // Bun doesn’t support all esbuild hooks; for example, onStart/onEnd might not work.
-      // We include only hooks that are supported or workaround.
-      build.onLoad({ filter: /.*/ }, async (args) => {
-        // no-op: placeholder or you can wrap this to track errors/logs
-        return null;
-      });
-    },
-  };
 
   const result = await Bun.build({
     entrypoints: ['src/extension.ts'],
@@ -79,7 +50,6 @@ const buildWithBun = async () => {
       'import.meta.url': 'import_meta.url',
     },
     tsconfig: 'tsconfig.json',
-    plugins: [problemMatcherPlugin],
     loader: { '.node': 'file' },
     watch: watch ? true : undefined,
     root: '.',
@@ -101,7 +71,7 @@ const main = async () => {
       buildWithBun();
       return;
     }
-  } catch (e) {
+  } catch {
     console.log('Bun not available, falling back to esbuild');
   }
 

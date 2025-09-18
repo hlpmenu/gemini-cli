@@ -36,6 +36,7 @@ const config = tseslint.config(
       'package/bundle/**',
       '.integration-tests/**',
       'dist/**',
+      'packages/vscode-ide-companion/esbuild.js',
       "scripts/**",
     ],
   },

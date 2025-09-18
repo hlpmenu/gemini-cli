@@ -48,7 +48,7 @@ async function buildSandbox() {
         'Skipping sandbox build (BUILD_SANDBOX environment variable is not set to "1" or "true").',
       );
     }
-  } catch (error) {
+  } catch {
     // The error from sandbox_command.js is descriptive enough.
     console.log(
       'Skipping sandbox build (sandbox container command not found).',

@@ -33,7 +33,8 @@ const runTypecheck = async (dir: string) => {
         console.log(`${dir} has no typecheck script if trigger`);
         return { dir, status: 'skip' as const };
       }
-      throw new Error(msg);
+      console.error(`Typecheck failed in: ${dir}\n ${msg}`);
+      process.exit(1); // Exit with a failure code
     } else {
       throw e;
     }

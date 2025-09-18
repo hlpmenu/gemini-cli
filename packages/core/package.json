@@ -84,7 +84,7 @@
     "vitest": "^3.1.1"
   },
   "overrides": {
-    "@google/gemini-cli-test-utils": "@hlmpn/gemini-cli-test-utils"
+    "@google/gemini-cli-test-utils": "file../hlmpn/gemini-cli-test-utils"
   },
   "engines": {
     "node": ">=20"
