@@ -37,10 +37,10 @@ const buildWithBun = async () => {
 
   const result = await Bun.build({
     entrypoints: ['src/extension.ts'],
-    outdir: 'packages/vscode-ide-companion/dist',
+    outfile: 'dist/extension.cjs',
     format: 'cjs',
     target: 'node',
-    minify: production,
+    minify: true,
     sourcemap: !production,
     external: ['vscode'],
     banner:
@@ -54,7 +54,7 @@ const buildWithBun = async () => {
     watch: watch ? true : undefined,
     root: '.',
     alias: {
-      '@google/gemini-cli-core': '../core/src',
+      '@google/gemini-cli-core': '../core',
     },
     conditions: ['node'], // try adding this
   });
@@ -62,6 +62,20 @@ const buildWithBun = async () => {
   if (!result.success) {
     console.error('⚠️ Bun.build failed:', result.logs);
     process.exit(1);
+  }
+  console.log(
+    result.success,
+    result.outputs.map((o) => o.path),
+    result.logs,
+    result.errors,
+    result.outputs,
+  );
+
+  try {
+    await Bun.write(a);
+    console.log('✅ Bundled successfully');
+  } catch (e) {
+    console.error('❌ Bundle failed:', e);
   }
 };
 
