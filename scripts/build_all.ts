@@ -101,7 +101,8 @@ const buildPackage = async () => {
   try {
     // 1. Run type-checks only
     // This will now be caught by the catch block on failure.
-    await $`bunx --bun tsc --noEmit`;
+
+    await $`bunx --bun tsgo -p ./tsconfig.json --noEmit`;
 
     // 2. Bundle sources with Bun (TS + TSX supported)
     const result = await Bun.build({
@@ -109,7 +110,6 @@ const buildPackage = async () => {
       outdir: 'dist',
       target: 'bun',
       sourcemap: 'none',
-      minify: true,
     });
 
     if (!result.success) {

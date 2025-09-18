@@ -14,10 +14,10 @@
     "start": "bun dist/src/http/server.js",
     "build": "bun ../../scripts/build_all.ts --build-package && mv dist/index.js dist/server.js",
     "lint": "bunx --bun eslint . --ext .ts,.tsx",
-    "format": "bunx --bun prettier --write .",
+    "format": "bunx --bun biome format --write .",
     "test": "bunx --bun vitest run",
     "test:ci": "bunx --bun vitest run --coverage",
-    "typecheck": "bunx --bun tsc --noEmit"
+    "typecheck": "bunx --bun tsgo -p ./tsconfig.json --noEmit"
   },
   "files": ["dist"],
   "dependencies": {
@@ -46,6 +46,6 @@
     "node": ">=24.0.0"
   },
   "overrides": {
-    "@google/gemini-cli-core": "file:../core"
+    "@google/gemini-cli-core": "@hlmpn/gemini-cli-core"
   }
 }

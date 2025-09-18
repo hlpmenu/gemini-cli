@@ -21,11 +21,13 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
-    "lib": ["ES2023"],
+    "lib": [ "ES2023" ],
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "target": "es2022",
-    "types": ["node", "vitest/globals"],
-    "jsx": "react-jsx"
+    "types": [ "node", "vitest/globals" ],
+    "jsx": "react-jsx",
+
+
   }
 }

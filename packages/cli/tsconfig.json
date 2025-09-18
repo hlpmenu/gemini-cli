@@ -3,8 +3,13 @@
   "compilerOptions": {
     "outDir": "dist",
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    "types": ["node", "vitest/globals"]
+    "lib": [ "DOM", "DOM.Iterable", "ES2023" ],
+    "types": [ "node", "vitest/globals" ],
+    "baseUrl": ".",
+    "paths": {
+      "@google/gemini-cli-core": [ "@hlmpn/gemini-cli-core" ],
+      "@hlmpn/gemini-cli-test-utils": [ "@hlmpn/gemini-cli-test-utils" ],
+    }
   },
   "include": [
     "index.ts",
@@ -82,5 +87,5 @@
     "src/validateNonInterActiveAuth.test.ts",
     "src/services/prompt-processors/shellProcessor.test.ts"
   ],
-  "references": [{ "path": "../core" }]
+  "references": [ { "path": "../core" } ]
 }

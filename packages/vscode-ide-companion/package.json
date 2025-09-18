@@ -92,15 +92,16 @@
   "main": "./dist/extension.cjs",
   "type": "module",
   "scripts": {
-    "vscode:prepublish": "bun run generate:notices && bun run check-types && bun run lint && bun esbuild.js --production",
-    "build": "bun run compile",
+    "vscode:prepublish": "bun run generate:notices && bun run check-types && bun run lint && bun run build:production",
+    "build:production": "bun esbuild.js --production",
+    "build:development": "bun esbuild.js",
     "compile": "bun run check-types && bun run lint && bun  esbuild.js",
     "watch": "bunx npm-run-all -p watch:*",
     "watch:esbuild": "bun  esbuild.js --watch",
     "watch:tsc": "bunx --bun tsc --noEmit --watch --project tsconfig.json",
     "package": "bunx --node vsce package --no-dependencies",
     "generate:notices": "bun scripts/bun-generate-notices.js",
-    "check-types": "bunx --bun tsc --noEmit",
+    "check-types": "bunx --bun tsgo -p ./tsconfig.json --noEmit",
     "typecheck": "bun run check-types",
     "lint": "bunx --bun eslint src",
     "test": "bunx --bun vitest run",
@@ -119,7 +120,7 @@
     "esbuild": "^0.25.3",
     "eslint": "^9.25.1",
     "npm-run-all2": "^8.0.2",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "dependencies": {

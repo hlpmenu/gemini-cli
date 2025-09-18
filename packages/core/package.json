@@ -11,10 +11,10 @@
   "scripts": {
     "build": "bun ../../scripts/build_all.ts --build-package",
     "lint": "bunx --bun eslint . --ext .ts,.tsx",
-    "format": "bunx --bun prettier --write .",
+    "format": "bunx --bun biome format --write .",
     "test": "bunx --bun vitest run",
     "test:ci": "bunx --bun vitest run --coverage",
-    "typecheck": "bunx --bun tsc --noEmit"
+    "typecheck": "bunx --bun tsgo -p ./tsconfig.json --noEmit"
   },
   "files": ["dist"],
   "dependencies": {
@@ -72,7 +72,7 @@
     "node-pty": "^1.0.0"
   },
   "devDependencies": {
-    "@google/gemini-cli-test-utils": "file:../test-utils",
+    "@hlmpn/gemini-cli-test-utils": "file:../test-utils",
     "@types/diff": "^7.0.2",
     "@types/dotenv": "^6.1.1",
     "@types/fast-levenshtein": "^0.0.4",
@@ -82,6 +82,9 @@
     "msw": "^2.3.4",
     "typescript": "^5.3.3",
     "vitest": "^3.1.1"
+  },
+  "overrides": {
+    "@google/gemini-cli-test-utils": "@hlmpn/gemini-cli-test-utils"
   },
   "engines": {
     "node": ">=20"

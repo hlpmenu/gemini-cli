@@ -6,35 +6,37 @@
 
 import type { Message, Task as SDKTask } from '@a2a-js/sdk';
 import type {
-  AgentExecutionEvent,
-  AgentExecutor,
-  ExecutionEventBus,
-  RequestContext,
   TaskStore,
+  AgentExecutor,
+  AgentExecutionEvent,
+  RequestContext,
+  ExecutionEventBus,
 } from '@a2a-js/sdk/server';
 import type {
-  Config,
-  ServerGeminiToolCallRequestEvent,
   ToolCallRequestInfo,
+  ServerGeminiToolCallRequestEvent,
+  Config,
 } from '@google/gemini-cli-core';
 import { GeminiEventType } from '@google/gemini-cli-core';
 import { v4 as uuidv4 } from 'uuid';
-import { loadConfig, loadEnvironment, setTargetDir } from '../config/config.js';
-import { loadExtensions } from '../config/extension.js';
-import { loadSettings } from '../config/settings.js';
-import { requestStorage } from '../http/requestStorage.js';
+
+import { logger } from '../utils/logger.js';
 import type {
+  StateChange,
   AgentSettings,
   PersistedStateMetadata,
-  StateChange,
 } from '../types.js';
 import {
   CoderAgentEvent,
   getPersistedState,
   setPersistedState,
 } from '../types.js';
-import { pushTaskStateFailed } from '../utils/executor_utils.js';
+import { loadConfig, loadEnvironment, setTargetDir } from '../config/config.js';
+import { loadSettings } from '../config/settings.js';
+import { loadExtensions } from '../config/extension.js';
 import { Task } from './task.js';
+import { requestStorage } from '../http/requestStorage.js';
+import { pushTaskStateFailed } from '../utils/executor_utils.js';
 
 /**
  * Provides a wrapper for Task. Passes data from Task to SDKTask.

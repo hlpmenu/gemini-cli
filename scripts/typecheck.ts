@@ -6,11 +6,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { promises as fs } from 'node:fs';
+import { existsSync, promises as fs } from 'node:fs';
 import { join } from 'node:path';
 import { $ } from 'bun';
 
+function ensureGeneratedExists(): boolean {
+  const file = 'packages/cli/src/generated/git-commit.ts';
+  if (!existsSync(file)) {
+    console.error(`   Run: bun generate:commit-info`);
+    return false;
+  }
+  return true;
+}
+
 const runTypecheck = async (dir: string) => {
+  if (dir === 'packages/cli' && !ensureGeneratedExists()) {
+    return { dir, status: 'skip' as const };
+  }
   let result: $.ShellOutput;
   try {
     result = await $`cd ${dir} && bun run typecheck`;
