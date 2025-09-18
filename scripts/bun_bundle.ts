@@ -5,9 +5,12 @@
  */
 
 // scripts/bun_build.ts
+
+import aliasPlugin from './bun-plugins/resolve-subpackage-plugin';
+
 console.log('PWD:', process.cwd());
 
-async function bundle(outputPath: string = 'bundle/gemini.js') {
+const bundle = async (outputPath: string = 'bundle/gemini.js') => {
   console.log(`Bundling with Bun to ${outputPath}...`);
 
   const result = await Bun.build({
@@ -18,8 +21,10 @@ async function bundle(outputPath: string = 'bundle/gemini.js') {
       whitespace: true,
       identifiers: true,
       syntax: true,
-      keepNames: false, // default
+      keepNames: false,
     },
+    plugins: [aliasPlugin],
+    tsconfig: 'packages/cli/tsconfig.json',
   });
 
   if (!result.success) {
@@ -36,7 +41,7 @@ async function bundle(outputPath: string = 'bundle/gemini.js') {
   await Bun.write('bundle/gemini.js', output);
 
   console.log('Bun build complete!');
-}
+};
 
 async function main() {
   let outputPath = 'bundle/gemini.js';

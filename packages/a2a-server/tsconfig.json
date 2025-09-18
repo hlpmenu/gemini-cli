@@ -2,6 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
     "lib": [ "DOM", "DOM.Iterable", "ES2021" ],
     "composite": true,
     "types": [ "node", "vitest/globals" ],

@@ -7,7 +7,7 @@
     "moduleResolution": "bundler",
     "checkJs": false,
     "allowJs": true,
-    "types": ["node", "vitest/globals", "bun"],
+    "types": [ "node", "vitest/globals", "bun" ],
     "noImplicitAny": false,
     "noPropertyAccessFromIndexSignature": false
   }

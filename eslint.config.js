@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 // Determine the monorepo root (assuming eslint.config.js is at the root)
 const projectRoot = __dirname;
 
-const config = tseslint.config(
+const tsEslintConfig = tseslint.config(
   {
     // Global ignores
     ignores: [
@@ -269,5 +269,11 @@ const config = tseslint.config(
   },
 );
 
-export default config;
+const config = [
 
+  ...tsEslintConfig,
+
+];
+
+
+export default config;

@@ -102,7 +102,23 @@ const buildPackage = async () => {
     // 1. Run type-checks only
     // This will now be caught by the catch block on failure.
 
-    await $`bunx --bun tsgo -p ./tsconfig.json --noEmit`;
+    try {
+      const declResult =
+        await $`bunx --bun tsgo -p ./tsconfig.json --declaration --emitDeclarationOnly`;
+
+      if (declResult.exitCode !== 0) {
+        console.error(
+          `Declaration emit failed:\n${declResult.stdout}\n${declResult.stderr}`,
+        );
+        process.exit(1);
+      }
+    } catch (e) {
+      if (e instanceof $.ShellError) {
+        console.error(`Declaration emit failed:\n${e.stdout}\n${e.stderr}`);
+        process.exit(1);
+      }
+      throw e;
+    }
 
     // 2. Bundle sources with Bun (TS + TSX supported)
     const result = await Bun.build({
